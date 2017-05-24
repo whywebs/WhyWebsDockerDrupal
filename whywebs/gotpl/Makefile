@@ -6,7 +6,7 @@ build:
 	mkdir -p ./bin
 	go build -o ./bin/gotpl .
 
-test:
+whywebs_drupal:
 	./test.sh
 
 dist:
