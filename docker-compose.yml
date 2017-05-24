@@ -119,8 +119,8 @@ services:
 #      - ./path/to/your/single-page-app:/app
 #    command: sh -c 'npm install && npm run start'
 
-#  memcached:
-#    image: whywebs/memcached:1.4-2.0.0
+ memcached:
+   image: whywebs/memcached:1.4-2.0.0
 
   traefik:
     image: traefik
@@ -139,5 +139,13 @@ volumes:
 # volumes:
 #   codebase:
 
+# # include multiple stages
+# jobs:
+#   include:
+#     - stage: test
+#       script: ./test 1
+#       script: ./test 2
+#     - stage: deploy
+#       script: ./deploy
 
   # Enjoy your whywebs drupal docker
