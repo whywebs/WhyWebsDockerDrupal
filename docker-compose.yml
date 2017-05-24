@@ -6,8 +6,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: whywebs
       MYSQL_DATABASE: whywebs_drupal_docker
-      MYSQL_USER: whywebs
-      MYSQL_PASSWORD: whywebs
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
 
   php:
    # Images with WhyWebs Drupal – whywebs/WhyWebsDockerDrupal:[DRUPAL_VERSION]-[PHP_VERSION]-[STABILITY_TAG].
@@ -25,14 +25,14 @@ services:
     environment:
       PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
       DB_HOST: mariadb
-      DB_USER: whywebs
-      DB_PASSWORD: whywebs
-      DB_NAME: whywebs_
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: whywebs_guest
       DB_DRIVER: mysql
       PHP_XDEBUG: 1
       PHP_XDEBUG_DEFAULT_ENABLE: 1
-      PHP_XDEBUG_REMOTE_CONNECT_BACK: 0         
-      PHP_XDEBUG_REMOTE_HOST: "10.254.254.254"  # 'sudo ifconfig lo0 alias 10.254.254.254'
+      # PHP_XDEBUG_REMOTE_CONNECT_BACK: 0         
+      # PHP_XDEBUG_REMOTE_HOST: "10.254.254.254"  # 'sudo ifconfig lo0 alias 10.254.254.254'
     volumes:
       - codebase:/var/www/html
 #      - docker-sync-unison:/var/www/html # Docker-sync for macOS users
@@ -40,7 +40,6 @@ services:
   nginx:
   # whywebs/WhyWebsDockerDrupal-nginx:[DRUPAL_VERSION]-[NGINX_VERSION]-[STABILITY_TAG].
     image: whywebs/WhyWebsDockerDrupal-nginx:8-1.10-2.1.0
-
     depends_on:
       - php
     environment:
@@ -72,18 +71,18 @@ services:
  redis:
    image: whywebs/redis:3.2-2.1.0
 
-#  pma:
-#    image: phpmyadmin/phpmyadmin
-#    environment:
-#      PMA_HOST: mariadb
-#      PMA_USER: drupal
-#      PMA_PASSWORD: drupal
-#      PHP_UPLOAD_MAX_FILESIZE: 1G
-#      PHP_MAX_INPUT_VARS: 1G
-#    labels:
-#      - 'traefik.backend=pma'
-#      - 'traefik.port=80'
-#      - 'traefik.frontend.rule=Host:pma.whywebs.docker.localhost'
+ pma:
+   image: phpmyadmin/phpmyadmin
+   environment:
+     PMA_HOST: mariadb
+     PMA_USER: root
+     PMA_PASSWORD: root
+     PHP_UPLOAD_MAX_FILESIZE: 1G
+     PHP_MAX_INPUT_VARS: 1G
+   labels:
+     - 'traefik.backend=pma'
+     - 'traefik.port=80'
+     - 'traefik.frontend.rule=Host:pma.whywebs.docker.localhost'
 
  solr:
 # whywebs/WhyWebsDockerDrupal-solr:[DRUPAL_VERSION]-[SOLR_VERSION]-[STABILITY_TAG].
