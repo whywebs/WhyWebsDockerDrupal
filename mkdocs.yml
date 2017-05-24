@@ -1,0 +1,5 @@
+site_name: WhyWebs Docker Drupal
+
+repo_url: https://github.com/whywebs/WhyWebsDockerDrupal
+site_description: 'WhyWebs Docker Drupal free drupal 7 & 8 with fully server setup.'
+theme: seven
