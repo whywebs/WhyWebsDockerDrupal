@@ -2,7 +2,7 @@
 
 VERSION ?= 7-5.6
 
-REPO = ../../whywebs/whywebs_drupal
+REPO = whywebs/whywebs_drupal
 NAME = drupal-$(VERSION)
 
 .PHONY: build test push shell run start stop logs clean release
