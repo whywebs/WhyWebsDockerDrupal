@@ -2,7 +2,7 @@
 
 VERSION ?= 8-5.5
 
-REPO = whywebs/WhyWebsDockerDrupal-solr
+REPO = whywebs/whywebsdockerdrupal-solr
 NAME = drupal-8-solr-5.5
 
 .PHONY: build test push shell run start stop logs clean release

@@ -4,9 +4,8 @@
 
 drupal ?= 7
 php ?= 5.6
-cmd ?= phing
 
-default: test
+default: whywebs_test
 
-test:
+whywebs_test:
 	cd ./whywebs_drupal/$(drupal)/$(php) && ./run.sh

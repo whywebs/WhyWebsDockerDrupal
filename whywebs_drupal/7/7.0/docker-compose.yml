@@ -4,10 +4,10 @@ services:
   mariadb:
     image: $MARIADB
     environment:
-      MYSQL_ROOT_PASSWORD: whywebs
+       MYSQL_ROOT_PASSWORD: whywebs
       MYSQL_DATABASE: whywebs_drupal_docker
-      MYSQL_USER: whywebs
-      MYSQL_PASSWORD: whywebs
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
 
   php:
     image: $DRUPAL7_PHP70
@@ -18,8 +18,8 @@ services:
     volumes:
       - codebase:/var/www/html
       - ./test.sh:/var/www/html/test.sh
-      - ./test.settings.php:/var/www/html/web/sites/default/test.settings.php
-      - ./feature_search_api_solr:/var/www/html/web/sites/all/modules/features/feature_search_api_solr
+      - ./test.settings.php:/var/www/html/$website_name/sites/default/test.settings.php
+      - ./feature_search_api_solr:/var/www/html/$website_name/sites/all/modules/features/feature_search_api_solr
 
   nginx:
     image: $DRUPAL7_NGINX
@@ -27,7 +27,7 @@ services:
       NGINX_STATIC_CONTENT_OPEN_FILE_CACHE: "off"
       NGINX_ERROR_LOG_LEVEL: debug
       NGINX_BACKEND_HOST: php
-      NGINX_SERVER_ROOT: /var/www/html/web
+      NGINX_SERVER_ROOT: /var/www/html/$website_name
     volumes:
       - codebase:/var/www/html
     depends_on:

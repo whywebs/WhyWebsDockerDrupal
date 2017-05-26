@@ -7,7 +7,7 @@ services:
 
 env:
   global:
-    - REPO=whywebs/whywebs_drupal-php
+    - REPO=github.com/whywebs/WhyWebsDockerDrupal/tree/master/whywebs/php
     - LATEST_DRUPAL=8
     - LATEST_PHP=7.1
   matrix:

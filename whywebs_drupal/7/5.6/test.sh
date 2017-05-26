@@ -6,11 +6,11 @@ if [[ ! -z "${DEBUG}" ]]; then
   set -x
 fi
 
-DB_NAME=drupal
+DB_NAME=whywebs_host
 DB_HOST=mariadb
-DB_USER=drupal
-DB_PASS=drupal
-DB_URL="mysql://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}"
+DB_USER=root
+DB_PASS=root
+DB_URL="mysql://'$DB_USER':'$DB_PASS'@'$DB_HOST'/'$DB_NAME'"
 
 make init -f /usr/local/bin/actions.mk
 
@@ -21,7 +21,7 @@ composer require \
     drupal/varnish \
     drupal/features
 
-cd ./web
+cd /Users/Elayyoub/melayyoub/test/web
 
 drush si --db-url="${DB_URL}" -y
 drush en -y redis search_api search_api_solr varnish features

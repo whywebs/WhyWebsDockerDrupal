@@ -1,3 +1,1 @@
-.idea/
-.docker-sync/
-whywebs_pre_installation/
+*.sublime-*

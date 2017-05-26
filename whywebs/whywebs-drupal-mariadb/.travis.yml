@@ -7,7 +7,7 @@ services:
 
 env:
   global:
-    - REPO=whywebs/whywebs_drupal-mariadb
+    - REPO=whywebs/whywebsdockerdrupal/tree/master/whywebs-drupal-mariadb
     - COMMIT=${TRAVIS_COMMIT::8}
 
 install:

@@ -12,7 +12,7 @@ services:
       - codebase:/var/www/html
       - ./server.conf:/var/www/html/server.conf
   drupal:
-    image: whywebs/WhyWebsDockerDrupal6
+    image: whywebs/whywebsdockerdrupal6
     volumes:
       - codebase:/var/www/html
 

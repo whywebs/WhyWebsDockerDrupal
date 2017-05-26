@@ -6,10 +6,10 @@ if [[ ! -z "${DEBUG}" ]]; then
   set -x
 fi
 
-DB_NAME=drupal
+DB_NAME=whywebs_drupal
 DB_HOST=mariadb
-DB_USER=drupal
-DB_PASS=drupal
+DB_USER=whywebs_drupal
+DB_PASS=whywebs_drupal
 DB_URL="mysql://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}"
 
 make init -f /usr/local/bin/actions.mk

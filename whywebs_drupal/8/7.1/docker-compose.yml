@@ -4,10 +4,10 @@ services:
   mariadb:
     image: $MARIADB
     environment:
-      MYSQL_ROOT_PASSWORD: whywebs
+       MYSQL_ROOT_PASSWORD: whywebs
       MYSQL_DATABASE: whywebs_drupal_docker
-      MYSQL_USER: whywebs
-      MYSQL_PASSWORD: whywebs
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
 
   php:
     image: $DRUPAL8_PHP71

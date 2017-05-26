@@ -2,7 +2,7 @@
 
 VERSION ?= 7-1.13
 
-REPO = whywebs/WhyWebsDockerDrupal-nginx
+REPO = whywebs/whywebsdockerdrupal-nginx
 NAME = drupal7-nginx-1.13
 
 .PHONY: build test push shell run start stop logs clean release

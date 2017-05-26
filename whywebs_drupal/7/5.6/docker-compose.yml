@@ -6,8 +6,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: whywebs
       MYSQL_DATABASE: whywebs_drupal_docker
-      MYSQL_USER: whywebs
-      MYSQL_PASSWORD: whywebs
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
 
   php:
     image: $DRUPAL7_PHP56
@@ -16,7 +16,7 @@ services:
       DRUPAL_VERSION: 7
       PHP_SENDMAIL_PATH: '/bin/true'
     volumes:
-      - codebase:/var/www/html
+      - codebase:/Users/Elayyoub/melayyoub/test
       - ./test.sh:/var/www/html/test.sh
       - ./test.settings.php:/var/www/html/web/sites/default/test.settings.php
       - ./feature_search_api_solr:/var/www/html/web/sites/all/modules/features/feature_search_api_solr
@@ -29,7 +29,7 @@ services:
       NGINX_BACKEND_HOST: php
       NGINX_SERVER_ROOT: /var/www/html/web
     volumes:
-      - codebase:/var/www/html
+      - codebase:/Users/Elayyoub/melayyoub/test
     depends_on:
       - php
 

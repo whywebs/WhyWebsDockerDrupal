@@ -2,7 +2,7 @@
 
 VERSION ?= 8-7.0
 
-REPO = whywebs/WhyWebsDockerDrupal
+REPO = whywebs/whywebsdockerdrupal
 NAME = drupal-$(VERSION)
 
 .PHONY: build test push shell run start stop logs clean release

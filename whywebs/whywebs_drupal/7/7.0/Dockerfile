@@ -1,4 +1,4 @@
-FROM whywebs/WhyWebsDockerDrupal-php:7.0
+FROM whywebs/whywebsdockerdrupal-php:7.0
 
 RUN mv /usr/local/bin/actions.mk /usr/local/bin/whywebs_drupal-php.mk && \
     mkdir /usr/src/drupal && \

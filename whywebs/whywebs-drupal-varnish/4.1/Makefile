@@ -2,7 +2,7 @@
 
 VERSION ?= 4.1
 
-REPO = whywebs/WhyWebsDockerDrupal-varnish
+REPO = whywebs/whywebsdockerdrupal-varnish
 NAME = drupal-varnish-$(VERSION)
 
 .PHONY: build test test-clean push shell run start stop logs clean release

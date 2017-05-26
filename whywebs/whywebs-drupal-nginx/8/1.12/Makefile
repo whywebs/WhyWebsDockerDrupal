@@ -2,7 +2,7 @@
 
 VERSION ?= 8-1.12
 
-REPO = whywebs/WhyWebsDockerDrupal-nginx
+REPO = whywebs/whywebsdockerdrupal-nginx
 NAME = drupal8-nginx-1.12
 
 .PHONY: build test push shell run start stop logs clean release
