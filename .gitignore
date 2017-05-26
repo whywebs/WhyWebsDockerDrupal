@@ -1,1 +1,10 @@
-*.sublime-*
+# Ignore configuration files that may contain sensitive information.
+public/sites/*/settings*.php
+public/sites/*/default.settings.php
+
+# Ignore paths that contain user-generated content.
+public/*
+deploy/*
+sites/*/settings.php
+vendor/*
+pre_installation_whywebs/*

@@ -3,82 +3,61 @@ version: "3"
 services:
   # cli:
   #   image: whywebs/cli:1.0
+  #
+  # This defines a data container to share common Platform.sh app assets such as:
+  #
+  data:
+    image: busybox
+    volumes:
+      - /certs
+      - /var/lib/mysql
+      - /code
+      - /php
 
   mariadb:
     image: mariadb:latest
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: whywebs
-      MYSQL_USER: root
+      MYSQL_USER: whywebsdrupal
       MYSQL_PASSWORD: root
 
   web:
-    image: 5.6.30-apache
-    volumes:
-      - ./public:/var/www/html
-      - ./test.sh:/var/www/html/test.sh
-      - ./test.settings.php:/var/www/html/web/sites/default/test.settings.php
+    image: php:5.6.30-apache
     ports:
-      - 9090:80
-    dns_search:
-      - whywebs.dev
-    address:
-
+      - "9090:80"
+      - "whywebs.site:8080:80"
+    hostname: whywebslocal
+    domainname: whywebs.dev
     links:
      - mariadb
      - mariadb:database
      - redis
-    logging:
-      driver: syslog
-      options:
-      syslog-address: "tcp://192.168.0.42:123"
+    volumes:
+      - ./public:/var/www/html
+    hostname: whywebs
+    environment:
+      DOMAIN: whywebs.dev
+      HOSTNAME: whywebslocal
+      HOME: ./public:/var/www/html
+      MYSQL_HOST: mariadb
 
   app:
     image: busybox
-    command: ifconfig
-    networks:
-      app_net:
-        ipv4_address: 172.16.238.10
-        ipv6_address: 2001:3984:3989::10
-
-  networks:
-    app_net:
-      driver: bridge
-      enable_ipv6: true
-      ipam:
-        driver: default
-        config:
-        - subnet: 172.16.238.0/24
-        - subnet: 2001:3984:3989::/64
 
   redis:
     image: redis:latest
 
-  nginx:
-    image: nginx
-      volumes:
-       - ./nginx:/etc/nginx/conf.d/nginx
-      ports:
-       - "1010:80"
-      environment:
-       - NGINX_HOST=nginx.whywebs.dev
-       - NGINX_PORT=80
-      command: /bin/bash -c "envsubst < /etc/nginx/conf.d/nginx > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+  # nginx:
+  #   image: nginx
+  #     volumes:
+  #      - ./nginx:/etc/nginx/conf.d/nginx
+  #     ports:
+  #      - "1010:80"
+  #     environment:
+  #      - NGINX_HOST=nginx.whywebs.dev
+  #      - NGINX_PORT=80
+  #     command: /bin/bash -c "envsubst < /etc/nginx/conf.d/nginx > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
   
-    drush:
-      image: drush/drush
-
-  expose:
-   - "9090"
-   - "1010"
-
-  extra_hosts:
-   - "whywebs.dev:162.242.195.82"
-   - "nginx:50.31.209.229"
-
-  healthcheck:
-    test: ["CMD", "curl", "-f", "http://localhost"]
-    interval: 1m30s
-    timeout: 10s
-    retries: 3
-
+  drush:
+    image: drush/drush
