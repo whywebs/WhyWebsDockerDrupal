@@ -18,8 +18,7 @@
     "ext-curl": "*",
     "drush/drush": "~8.0",
     "phing/phing": "^2.16",
-    "psy/psysh": "^0.8.5",
-    "pear/http_request2": "^2.3"
+    "psy/psysh": "^0.8.5"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -29,8 +28,8 @@
   },
   "scripts": {
     "post-install-cmd": [
-      "phing -debug",
-      "docker-compose up -d"
+      "composer config --global process-timeout 9999",
+      "phing -debug"
         ],
     "lint": [
       "./vendor/bin/phplint",

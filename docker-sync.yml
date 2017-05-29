@@ -1,8 +1,0 @@
-version: "2"
-
-syncs:
-  docker-sync-unison:
-    src: './web'
-    dest: '/Users/Elayyoub/melayyoub/test'
-    sync_userid: '82'
-    sync_excludes: ['.gitignore', '.git/', '.idea/', 'whywebs_pre_installation/']
