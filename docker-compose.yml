@@ -12,6 +12,7 @@ services:
       MYSQL_DATABASE: whywebs
       MYSQL_USER: whywebs
       MYSQL_PASSWORD: whywebs
+      MYSQL_HOST: localhost
     volumes:
       # Use a "volume" to prevent data from disappearing when the container is
       # restarted.
@@ -33,10 +34,9 @@ services:
     ports:
       - 8100:80
 
-
   jenkins:
     container_name: j_whywebs
-    image: whywebs/jenkins
+    image: whywebs/jenkins:latest
     ports:
       - "4040:8080"
       - "50000:50000"
@@ -47,6 +47,7 @@ services:
 
   nginx:
     build: ./whywebs-drupal/nginx
+    image: whywebs/nginx:latest
     container_name: n_whywebs
     volumes:
      - ./nginx:/etc/nginx
@@ -58,7 +59,8 @@ services:
 
   solr:
     # Example of extending a container with our own Dockerfile
-    build: ./whywebs-drupal/solr/
+    build: ./whywebs-drupal/solr
+    image: whywebs/solr:latest
     # Expose port 8983 directly on the host
     ports:
       - 8983:8983
@@ -84,6 +86,8 @@ services:
 
   web:
     build: ./
+    image: whywebs/drupal7:latest
+    container_name: web_whywebs
     volumes:
       # Mount the local drupal directory in the container
       - ./deploy:/var/www/html
@@ -96,7 +100,7 @@ services:
       - solr:solr
       # Link the mariaDB container:
       - mariadb:mariadb
+      - jenkins:jenkins
     environment:
      - WHYWEBS_HOST=whywebs.dev
      - WHYWEBS_PORT=80
-

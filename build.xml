@@ -116,11 +116,19 @@
       </not>
       <then>
        <exec command="mkdir ${dir.base}/deploy/sites/default/files" logoutput="true" checkreturn="true"/>
-       <chmod file="${dir.base}/deploy/sites/default/files" mode="0777" />
+       <exec command="chmod -Rv 777 ${dir.base}/deploy/sites/default" logoutput="true" checkreturn="true"/>
+       <exec command="chmod 644 ${dir.base}/deploy/sites/default/default.settings.php" logoutput="true" checkreturn="true"/>
     </then>
   </if>
-    
-  </target>
+  <if>
+      <not>
+        <available file="${dir.base}/deploy/logs" type="dir" />
+      </not>
+      <then>
+       <exec command="mkdir ${dir.base}/deploy/logs" logoutput="true" checkreturn="true"/>
+    </then>
+  </if>
+</target>
 
   <!--  -->
 <target name="ww:docker" description="fix all docker options and folders">
