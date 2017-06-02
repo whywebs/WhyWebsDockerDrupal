@@ -1,5 +1,5 @@
 # from https://www.drupal.org/requirements/php#drupalversions
-FROM php:7.0-fpm
+FROM php:5.6-apache
 
 # install the PHP extensions we need
 RUN set -ex \

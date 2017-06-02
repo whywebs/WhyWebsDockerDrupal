@@ -14,6 +14,8 @@
   <property name="dir.features" value="${dir.base}/features"/>
   <property name="dir.timeago" value="${dir.base}/libraries/timeago"/>
   <property name="dir.zendlibraries" value="${dir.base}/libraries/Zend"/>
+  <property name="composerPhar" value="${dir.base}/composer.phar"/>
+  <property name="sudoPassword" value="123"/>
   <property name="vendorname" value="whywebs"/>
   <property name="memory" value='ini_set("memory_limit", "512M");'/>
   <property name="message" value="This phing built by Mutasem Elayyoub for WhyWebs.com"/>
@@ -44,19 +46,17 @@
   <target name="drupal:build"
     depends="php-check,
       composer-check,
-      composer-download,
-      composerUpdate,
       drupal:drush:make,
       drupal:cleanup-temp,
       drupal:symlink:profiles, drupal:symlink:sites, drupal:symlink:themes, drupal:symlink:modules, drupal:symlink:features, drupal:symlink:files, drupal:symlink:private,
       drupal:compass:compile,
       drupal:overwrite,
       drupal:chmod,
-      ww:dockerInstall
+      ww:dockerInstall,
+      ww:resync,
       ww:docker,
       ww:jenkins,
-      copy:zend:to:libraries:for:oauth,
-      ww:runDockerWeb" 
+      copy:zend:to:libraries:for:oauth"
     description="Build the Drupal codebase" />
 
 
@@ -80,13 +80,13 @@
 <!-- install docker -->
 <target name="ww:dockerInstall" depends="ww:dockerCheck">
     <echo msg="Install docker compose now ==> "/>
-    <exec command="whoami" outputProperty="currentuser" />
+    <exec command="whywebs" outputProperty="currentuser" />
     <!-- Set the 'issudo' property to be true if the user is root -->
     <condition property="issudo">
         <equals arg1="${currentuser}" arg2="root" />
     </condition>
-    <exec command="curl -L --fail https://github.com/docker/compose/releases/download/1.13.0/run.sh > /usr/local/bin/docker-compose"/>
-    <exec command="echo ${sudoPassword} | sudo -S chmod +x /usr/local/bin/docker-compose"/>
+    <exec command="curl -L --fail https://github.com/docker/compose/releases/download/1.13.0/run.sh >> /usr/local/bin/docker-compose" logoutput="true" checkreturn="false"/>
+    <exec command="echo ${sudoPassword} | sudo -S chmod +x /usr/local/bin/docker-compose" logoutput="true" checkreturn="false"/>
 </target>
 
 
@@ -97,17 +97,38 @@
       drupal:cache-clear"
     description="Update the current site install with the new codebase." />
 
+  <!-- resync all the file to deploy folder to copy it in the docker container -->
+  
+  <target name="ww:resync" description="Resynce all files into deploy and copy it into docker container">
+    <!-- # run docker-compose -->
+    <if>
+      <not>
+        <available file="${dir.base}/deploy" type="dir" />
+      </not>
+      <then>
+       <exec command="mkdir ${dir.base}/deploy" logoutput="true" checkreturn="true"/>
+    </then>
+  </if>
+    <exec command="rsync -rLcpzv --exclude=.git --exclude=.idea --exclude=**/bower_components --exclude=**/node_modules --exclude=**/.sass-cache public/ deploy/" logoutput="true" checkreturn="true"/>
+    <if>
+      <not>
+        <available file="${dir.base}/deploy/sites/default/files" type="dir" />
+      </not>
+      <then>
+       <exec command="mkdir ${dir.base}/deploy/sites/default/files" logoutput="true" checkreturn="true"/>
+       <chmod file="${dir.base}/deploy/sites/default/files" mode="0777" />
+    </then>
+  </if>
+    
+  </target>
 
+  <!--  -->
 <target name="ww:docker" description="fix all docker options and folders">
     <!-- # run docker-compose -->
     <exec command="docker-compose up -d" logoutput="true" checkreturn="true"/>
     <!-- docker run -p 9090:80 -v $PATH/public:/var/www/html -t whywebs/drupal -->
   </target>
 
-<target name="ww:runDockerWeb" description="fix all docker options and folders">
-    <exec command="docker run -p 5050:5050 -v whywebsdocker_web_1 ${dir.base}/public:/var/www/html --debug" logoutput="true" checkreturn="true"/>
-    <!--  -->
-  </target>
 
  <target name="ww:jenkins" description="fix all docker options and folders">
   <if>
@@ -128,19 +149,9 @@
             <then>
                 <exec command="mkdir ${dir.base}/nginx" logoutput="true" checkreturn="true"/>
                 <exec command="git clone https://github.com/jenkinsci/docker-nginx/stable/stretch-perl/Dockerfile ${dir.base}/nginx" />
-                
               </then>
             </if>
-    <!-- # create new VM -->
-     <exec command="docker-machine create -d virtualbox --virtualbox-memory '2048' whywebs-host" logoutput="true" checkreturn="true"/>
 
-    <!-- # point shell -->
-    <exec command="eval $(docker-machine env whywebs-host)" logoutput="true" checkreturn="true"/>
-
-   <!--  # get administrator password -->
-    <exec command="docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword" logoutput="true" checkreturn="true" />
-    <property name="debug.jenkins" value="docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword"
-                override="true" logoutput="true" />
     <echo msg="${message}"/>
   </target>
   <!--  Install all the requirments com through and to composer  -->
@@ -161,7 +172,7 @@
         </exec>
     </target>
     
-    <target name="composerUpdate" depends="composer-selfupdate" unless="composer.noupdate" description="Run composer update">
+    <target name="composerUpdate" depends="composer-selfupdate" unless="composer.noselfupdate" description="Run composer update">
         <exec executable="${php}">
             <arg value="${composerPhar}"/>
             <arg value="update"/>
@@ -179,12 +190,13 @@
     <target name="drupal:drush:make" description="Run drush make and create the temporary codebase.">
         <exec command="rm -rf ${dir.temp}" logoutput="true" checkreturn="true"/>
         <exec command="drush make -y --concurrency=2 --no-patch-txt ${dir.base}/whywebs-drupal/project.make ${dir.temp}" logoutput="true" checkreturn="true"/>
+        
         <echo msg="${message}"/>
     </target>
 
   <target name="drupal:cleanup-temp" description="Clean unnecessary files in the temporary Drupal directory">
     <!-- Remove all text files except robots.txt and other usefull txts. -->
-    <exec command="find ${dir.temp} -iname '*.txt' -not -path '*features*' -not -path '*test*' -not -path '*context*' -not -path '*zen*' -not -name 'robots.txt' -print -delete" logoutput="true" checkreturn="false" />
+    <!-- <exec command="find ${dir.temp} -iname '*.txt' -not -path '*features*' -not -path '*test*' -not -path '*context*' -not -path '*zen*' -not -name 'robots.txt' -print -delete" logoutput="true" checkreturn="false" /> -->
 
     <!-- Remove all patch files. -->
     <exec command="find ${dir.temp} -iname '*.patch' -print -delete" logoutput="true" checkreturn="false" />

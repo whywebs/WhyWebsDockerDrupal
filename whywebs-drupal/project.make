@@ -174,6 +174,9 @@ projects[redis][subdir] = "contrib"
 projects[search_api_db][type] = "module"
 projects[search_api_db][subdir] = "contrib"
 
+projects[search_api_solr][type] = "module"
+projects[search_api_solr][subdir] = "contrib"
+
 projects[search_api_view_modes][type] = "module"
 projects[search_api_view_modes][subdir] = "contrib"
 
