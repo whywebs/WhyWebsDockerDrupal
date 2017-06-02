@@ -70,8 +70,6 @@ RUN set -ex \
 	&& echo "<IfModule mod_dir.c>" >> /etc/apache2/mods-enabled/dir.conf \
 	&& echo " DirectoryIndex index.php index.html index.cgi index.pl index.php index.xhtml index.htm" >> /etc/apache2/mods-enabled/dir.conf \
 	&& echo " </IfModule>" >> /etc/apache2/mods-enabled/dir.conf \
-	&& cd /tmp && curl -O 'http://ftp.debian.org/debian/pool/main/w/wkhtmltopdf/wkhtmltopdf-dbg_0.12.3.2-3_amd64.deb' \
-    && dpkg -i /tmp/wkhtmltopdf-dbg_0.12.3.2-3_amd64.deb \
     && apt-get -y clean \
     && apt-get -y autoclean \
     && apt-get -y autoremove \

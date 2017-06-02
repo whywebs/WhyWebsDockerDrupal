@@ -76,6 +76,9 @@ services:
     build: ./
     image: whywebs/drupal7:latest
     container_name: web_whywebs
+    Hostname: whywebs
+    stdin_open: true
+    tty: true
     volumes:
       # Mount the local drupal directory in the container
       - ./deploy:/var/www/html
