@@ -20,10 +20,8 @@ RUN set -ex \
 	&& apt-get update -y \
 	&& apt-get upgrade -y && apt-get dist-upgrade -y \
 	&& apt-cache search php5 \
-	&& apt-get install -y unzip && apt-get install -y wget && apt-get install -y curl && apt-get install -y git  && apt-get install apache2 apache2-utils -y && apt-get install nano -y \
-	&& apt-get install php5-mysql php5-curl php5-gd php5-intl php-pear gcc libpcre3-dev php5-imagick php5-imap php5-mcrypt php5-memcache php5-pspell php5-recode php5-sqlite php5-tidy php5-xmlrpc php5-xsl software-properties-common -y \
-	&& apt-get install php-soap -y \	
-	&& apt-get install -y nginx \
+	&& apt-get install -y unzip nginx apache2 apache2-utils wget curl git nano \ 
+	&& apt-get install php5-mysql php5-gd php5-curl php-pear gcc libpcre3-dev php5-imagick php5-mcrypt php5-memcache -y \
 	&& pecl search xdebug \
 	&& pecl install xdebug-beta \
 	&& git clone git://github.com/xdebug/xdebug.git \

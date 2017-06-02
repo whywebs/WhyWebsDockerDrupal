@@ -45,18 +45,6 @@ services:
     stdin_open: true
     tty: true
 
-  nginx:
-    build: ./whywebs-drupal/nginx
-    image: whywebs/nginx:latest
-    container_name: n_whywebs
-    volumes:
-     - ./nginx:/etc/nginx
-    ports:
-     - "1010:1010"
-    environment:
-     - NGINX_HOST=nginx.whywebs.dev
-     - NGINX_PORT=1010
-
   solr:
     # Example of extending a container with our own Dockerfile
     build: ./whywebs-drupal/solr
@@ -94,7 +82,7 @@ services:
       - ./whywebscli.sh:/var/www/html/whywebscli.sh
     ports:
     # Expose port 8101 on the host.  Useful for debugging w/o Varnish
-    - 8101:80
+    - "8080:80"
     links:
       # Link the Solr container:
       - solr:solr
@@ -102,5 +90,23 @@ services:
       - mariadb:mariadb
       - jenkins:jenkins
     environment:
-     - WHYWEBS_HOST=whywebs.dev
+     - WHYWEBS_DB=whywebs
+     - WHYWEBS_PASS=whywebs
+     - WHYWEBS_USER=whywebs
+     - WHYWEBS_HOST=localhost
+     - WHYWEBS_HOST=whywebs.local
      - WHYWEBS_PORT=80
+
+  # nginx:
+  #   build: ./whywebs-drupal/nginx
+  #   image: whywebs/nginx:latest
+  #   container_name: n_whywebs
+  #   volumes:
+  #    - ./deploy:/etc/nginx
+  #    - ./config/drupal.conf:/etc/nginx/conf.d/drupal.conf
+  #    - ./config/nginx.conf:/etc/nginx/conf.d/nginx.conf
+  #   ports:
+  #    - "1010:1010"
+  #   environment:
+  #    - NGINX_HOST=nginx.whywebs.dev
+  #    - NGINX_PORT=1010
