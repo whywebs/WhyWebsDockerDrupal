@@ -1,6 +1,20 @@
 FROM php:5.6.30-apache
 MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 
+# enviroment YOU CAN CHANGE THIS ENV DEPENDING ON WHAT YOU NEED YOUR ADMIN AND PASSWORD
+#To change this please make sure to change the compose mariaDB too
+ENV WHYWEBS_DB whywebs 
+ENV WHYWEBS_DB_PASS whywebs 
+ENV WHYWEBS_DB_ADMIN whywebs 
+
+#To change this please make sure to change the compose mariaDB too
+ENV WHYWEBS_PASS whywebs 
+ENV WHYWEBS_USER whywebs
+ENV WHYWEBS_WEB_NAME Whywebs Docker Drupal
+
+# DONNOT CHANGE THE HOST BELOW
+ENV WHYWEBS_DB_HOST 192.168.99.100:3306
+
 # install the PHP extensions we need
 RUN curl -fsSL 'https://xcache.lighttpd.net/pub/Releases/3.2.0/xcache-3.2.0.tar.gz' -o xcache.tar.gz \
     && mkdir -p xcache \
@@ -74,7 +88,7 @@ RUN set -ex \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/* && rm -rf && rm -rf /var/lib/cache/* && rm -rf /var/lib/log/* && rm -rf /tmp/* \
-	&& service apache2 restart
+    && chmod 600 /etc/mysql/my.cnf 
 
 COPY ./whywebs-drupal/php.ini /usr/local/etc/php/conf.d
 COPY ./whywebs-drupal/whywebs.dev.conf /etc/apache2/sites-enabled	
@@ -82,6 +96,10 @@ COPY ./deploy /var/www/html
 COPY ./config/mysql /etc/mysql
 COPY ./config/drush /home/root/.drush
 COPY ./config/nginx /etc/nginx
+
+RUN service apache2 restart \
+	&& cd /var/www/html \
+	&& drush site-install standard --db-url='mysql://$(WHYWEBS_DB_ADMIN):$(WHYWEBS_DB_PASS)@$(WHYWEBS_DB_HOST)/$(WHYWEBS_DB)' --site-name=$(WHYWEBS_WEB_NAME) -y --account-name=$(WHYWEBS_ADMIN) --account-pass=$(WHYWEBS_PASS)
 
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log
