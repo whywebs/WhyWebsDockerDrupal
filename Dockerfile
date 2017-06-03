@@ -102,7 +102,7 @@ RUN ln -sf ./logs /var/log/nginx/access.log \
 	&& service apache2 restart \
 	&& cd /var/www/html \
 	&& drush site-install standard --db-url='mysql://whywebs:whywebs@192.168.99.100:3306/whywebs' --site-name=Whywebs Docker Drupal -y --account-name=admin --account-pass=whywebs \
-	&& drush pm-enable views* token search_api* admin_menu features -y \
+	&& drush pm-enable views token search_api admin_menu features -y \
 	&& drush pm-disable toolbar -y
 
 EXPOSE 80
