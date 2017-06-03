@@ -6,14 +6,13 @@ MAINTAINER Mutasem Elayyoub "melayyoub@outlook.com"
 ENV WHYWEBS_DB whywebs 
 ENV WHYWEBS_DB_PASS whywebs 
 ENV WHYWEBS_DB_ADMIN whywebs 
-
 #To change this please make sure to change the compose mariaDB too
 ENV WHYWEBS_PASS whywebs 
 ENV WHYWEBS_USER whywebs
 ENV WHYWEBS_WEB_NAME Whywebs Docker Drupal
 
-# DONNOT CHANGE THE HOST BELOW
-ENV WHYWEBS_DB_HOST 192.168.99.100:3306
+# DONNOT CHANGE THE HOST BE
+
 
 # install the PHP extensions we need
 RUN curl -fsSL 'https://xcache.lighttpd.net/pub/Releases/3.2.0/xcache-3.2.0.tar.gz' -o xcache.tar.gz \
@@ -87,8 +86,8 @@ RUN set -ex \
     && apt-get -y clean \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
-    && rm -rf /var/lib/apt/lists/* && rm -rf && rm -rf /var/lib/cache/* && rm -rf /var/lib/log/* && rm -rf /tmp/* \
-    && chmod 600 /etc/mysql/my.cnf 
+    && rm -rf /var/lib/apt/lists/* && rm -rf && rm -rf /var/lib/cache/* && rm -rf /var/lib/log/* && rm -rf /tmp/* 
+    
 
 COPY ./whywebs-drupal/php.ini /usr/local/etc/php/conf.d
 COPY ./whywebs-drupal/whywebs.dev.conf /etc/apache2/sites-enabled	
@@ -97,12 +96,14 @@ COPY ./config/mysql /etc/mysql
 COPY ./config/drush /home/root/.drush
 COPY ./config/nginx /etc/nginx
 
-RUN service apache2 restart \
-	&& cd /var/www/html \
-	&& drush site-install standard --db-url='mysql://$(WHYWEBS_DB_ADMIN):$(WHYWEBS_DB_PASS)@$(WHYWEBS_DB_HOST)/$(WHYWEBS_DB)' --site-name=$(WHYWEBS_WEB_NAME) -y --account-name=$(WHYWEBS_ADMIN) --account-pass=$(WHYWEBS_PASS)
-
 RUN ln -sf ./logs /var/log/nginx/access.log \
-    && ln -sf ./logs /var/log/nginx/error.log
+    && ln -sf ./logs /var/log/nginx/error.log \
+    && chmod 600 /etc/mysql/my.cnf \
+	&& service apache2 restart \
+	&& cd /var/www/html \
+	&& drush site-install standard --db-url='mysql://whywebs:whywebs@192.168.99.100:3306/whywebs' --site-name=Whywebs Docker Drupal -y --account-name=admin --account-pass=whywebs \
+	&& drush pm-enable views* token search_api* admin_menu features -y \
+	&& drush pm-disable toolbar -y
 
 EXPOSE 80
 WORKDIR /var/www/html
