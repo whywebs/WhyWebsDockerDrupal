@@ -30,7 +30,9 @@
   "scripts": {
     "post-install-cmd": [
       "composer config --global process-timeout 9999",
-      "phing -debug"
+      "phing -debug",
+      "docker exec web_whywebs /var/www/html/whywebscli.sh",
+      "echo 'welcome to Whywebs drupal docker version build by Mutasem Elayyoub whywebs.com'"
 
         ],
     "lint": [

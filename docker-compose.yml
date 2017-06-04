@@ -1,9 +1,9 @@
 version: "2"
 
 services:
-  
   mariadb:
-    image: mariadb:latest
+    build: ./whywebs-drupal/db
+    image: whywebs/mariadb:latest
     container_name: m_whywebs
     ports:
       - "3306:3306"
@@ -29,7 +29,7 @@ services:
       VARNISH_BACKEND_IP: web
     # Set up the internal link
     links:
-      - web:web
+      - web:web_whywebs
     # Expose port 8100 on the host.
     ports:
       - 8100:80
@@ -52,25 +52,25 @@ services:
     # Expose port 8983 directly on the host
     ports:
       - 8983:8983
-  #
-  # Drush
-  #
-  drush:
+  # #
+  # # Drush
+  # #
+  # drush:
 
-    # Comment this and uncomment 'build' below if you want to edit your
-    # local dockerfile and build from there. This is useful for development
-    image: drush/drush:8-php5
-    volumes:
-      - ./config/drush:/home/root/.drush
-    environment:
-      COLUMNS: 150
-      DOMAIN: whwyebs.dev
-      HOME: /home/root
-      HOSTNAME: whywebs.dev
-      MYSQL_HOST: mariadb
-      TERM: xterm
-    stdin_open: true
-    tty: true
+  #   # Comment this and uncomment 'build' below if you want to edit your
+  #   # local dockerfile and build from there. This is useful for development
+  #   image: drush/drush:8-php5
+  #   volumes:
+  #     - ./config/drush:/home/root/.drush
+  #   environment:
+  #     COLUMNS: 150
+  #     DOMAIN: whwyebs.dev
+  #     HOME: /home/root
+  #     HOSTNAME: whywebs.dev
+  #     MYSQL_HOST: mariadb
+  #     TERM: xterm
+  #   stdin_open: true
+  #   tty: true
 
   web:
     build: ./
@@ -87,14 +87,24 @@ services:
     ports:
     # Expose port 8101 on the host.  Useful for debugging w/o Varnish
     - "8080:80"
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+      - "jenkins"
     links:
       # Link the Solr container:
       - solr:solr
       # Link the mariaDB container:
-      - mariadb:mariadb
+      - mariadb:mysql
       - jenkins:jenkins
     environment:
+     - WHYWEBS_HOST=whywebs.dev
      - WHYWEBS_PORT=80
+
+    # command:
+    #   - /var/www/html/whywebscli.sh
 
   # nginx:
   #   build: ./whywebs-drupal/nginx
@@ -109,3 +119,16 @@ services:
   #   environment:
   #    - NGINX_HOST=nginx.whywebs.dev
   #    - NGINX_PORT=1010
+
+  phpmyadmin:
+    image: corbinu/docker-phpmyadmin
+    links:
+      - mariadb:mysql
+    ports:
+      - 8181:80
+    environment:
+      MYSQL_USERNAME: whywebs
+      MYSQL_ROOT_PASSWORD: whywebs
+      MYSQL_USER: whywebs
+      MYSQL_PASSWORD: whywebs
+

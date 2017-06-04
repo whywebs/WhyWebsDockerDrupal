@@ -1,6 +1,6 @@
-# Standard mariadb 5.5 container
+# Standard mariadb latest container
 
-FROM mariadb:5.5
+FROM mariadb:latest
 
 #
 # Add your custom stuff here, you will want to make sure
