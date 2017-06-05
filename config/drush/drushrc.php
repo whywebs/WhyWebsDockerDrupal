@@ -264,7 +264,7 @@ $options['backup-dir'] = getenv('HOME') . '/.drush/backups';
  * See: https://github.com/kalabox/kalabox/issues/1287
  *
  */
-$options['uri'] = 'whywebs.dev';
+$options['uri'] = 'local.dev';
 
 /**
  * Command-specific execution options:

@@ -18,4 +18,4 @@ drush pm-disable toolbar -y
 
 chmod -Rv 777 sites/default/files
 
-drush uli --uri="http://whywebs.dev"
+drush uli --uri="http://local.dev"

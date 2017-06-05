@@ -67,7 +67,7 @@ RUN set -ex \
 	&& echo 'xdebug.show_error_trace = 1' /etc/php/5.6/mods-available/xdebug.ini \
 	&& echo 'ServerName localhost' >> /etc/apache2/apache2.conf \
 	&& chmod -R 755 /var/www/html \
-	&& echo '127.0.0.1   whywebs.dev' >> /etc/hosts \
+	&& echo '127.0.0.1   local.dev' >> /etc/hosts \
 	&& echo "<IfModule mod_dir.c>" >> /etc/apache2/mods-enabled/dir.conf \
 	&& echo " DirectoryIndex index.php index.html index.cgi index.pl index.php index.xhtml index.htm" >> /etc/apache2/mods-enabled/dir.conf \
 	&& echo " </IfModule>" >> /etc/apache2/mods-enabled/dir.conf \
