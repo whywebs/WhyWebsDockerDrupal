@@ -34,7 +34,6 @@
       "rm -rf ~/.composer/cache/*",
       "phing -debug",
       "docker exec web_whywebs /var/www/html/whywebscli.sh",
-      ". whywebslocal.sh",
       "echo 'welcome to Whywebs drupal docker version build by Mutasem Elayyoub whywebs.com'"
 
         ],
