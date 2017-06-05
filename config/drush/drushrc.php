@@ -249,21 +249,8 @@
 # $options['variables']['theme_default'] = 'minnelli';
 # $options['variables']['anonymous'] = 'Visitor';
 
-/**
- * Override the default drush backup-dir with one that will be shared out to
- * `config/drush` in the users app on their host machine.
- *
- * See: https://github.com/kalabox/kalabox/issues/1297
- *
- */
 $options['backup-dir'] = getenv('HOME') . '/.drush/backups';
 
-/**
- * Explicitly set the URI here
- *
- * See: https://github.com/kalabox/kalabox/issues/1287
- *
- */
 $options['uri'] = 'local.dev';
 
 /**
