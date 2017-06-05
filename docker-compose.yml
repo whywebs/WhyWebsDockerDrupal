@@ -123,9 +123,12 @@ services:
   #    - NGINX_PORT=1010
 
   phpmyadmin:
-    image: corbinu/docker-phpmyadmin
-    links:
-      - mariadb:mysql
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+     - PMA_ARBITRARY=1
+    volumes:
+     - /sessions
     ports:
       - 8181:80
     environment:
@@ -133,4 +136,6 @@ services:
       MYSQL_ROOT_PASSWORD: whywebs
       MYSQL_USER: whywebs
       MYSQL_PASSWORD: whywebs
+    external_links:
+        - mariadb:mariadb
 

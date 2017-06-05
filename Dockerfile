@@ -84,6 +84,10 @@ COPY ./config/mysql /etc/mysql
 COPY ./config/drush /home/root/.drush
 COPY ./config/nginx /etc/nginx
 
+# Copy PHPmyADmin configuration
+COPY config/phpmyadmin /etc/
+
+
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
