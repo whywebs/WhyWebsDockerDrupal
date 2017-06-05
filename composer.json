@@ -25,13 +25,16 @@
   "prefer-stable": true,
   "config": {
     "vendor-dir": "vendor",
-    "bin-dir": "vendor/bin"
+    "bin-dir": "vendor/bin",
+    "cache-dir": "cache/composer"
   },
   "scripts": {
     "post-install-cmd": [
       "composer config --global process-timeout 9999",
+      "rm -rf ~/.composer/cache/*",
       "phing -debug",
       "docker exec web_whywebs /var/www/html/whywebscli.sh",
+      ". whywebslocal.sh",
       "echo 'welcome to Whywebs drupal docker version build by Mutasem Elayyoub whywebs.com'"
 
         ],
