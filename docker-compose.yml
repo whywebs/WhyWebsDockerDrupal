@@ -14,16 +14,12 @@ services:
       MYSQL_PASSWORD: whywebs
       MYSQL_HOST: localhost
     volumes:
-      # Use a "volume" to prevent data from disappearing when the container is
-      # restarted.
       - /var/lib/mysql
-      # In a production setting, you'd use a locally mounted volume for extra
-      # persistence.  This would mount ./data to /var/lib/mysql inside the container:
-      # - ./data:/var/lib/mysql
   
   varnish:
+    build: ./whywebs-drupal/varnish
     # A public image with a Varnish install
-    image: jacksoncage/varnish
+    image: whywebs/varnish
     # Pass backend connections to the linked "web" container
     environment:
       VARNISH_BACKEND_IP: web
@@ -32,7 +28,7 @@ services:
       - web:web_whywebs
     # Expose port 8100 on the host.
     ports:
-      - 8100:80
+      - 8111:81
 
   jenkins:
     container_name: j_whywebs
@@ -52,6 +48,73 @@ services:
     # Expose port 8983 directly on the host
     ports:
       - 8983:8983
+
+  web:
+    build: ./
+    image: whywebs/drupal7:latest
+    container_name: web_whywebs
+    external_links:
+      - "whywebs.dev:192.168.99.100"
+    hostname: whywebs
+    stdin_open: true
+    tty: true
+    volumes:
+      # Mount the local drupal directory in the container
+      - ./deploy:/var/www/html
+      - ./whywebscli.sh:/var/www/html/whywebscli.sh
+      - ./whywebs-drupal/php.ini:/usr/local/etc/php/conf.d/php.ini
+    ports:
+       - "80/:80"
+       - "443:443"
+    depends_on:
+      # Link the Solr container:
+      - "solr"
+      # Link the mariaDB container:
+      - "mariadb"
+      - "jenkins"
+      - "phpmyadmin"
+    links:
+      # Link the Solr container:
+      - solr:solr
+      # Link the mariaDB container:
+      - mariadb:mysql
+      - jenkins:jenkins
+      - phpmyadmin:mysql
+    environment:
+     - WHYWEBS_HOST=whywebs
+     - WHYWEBS_PORT=80
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: w_phpmyadmin
+    environment:
+     - PMA_ARBITRARY=1
+    volumes:
+     - ./deploy/phpmyadmin:/etc/phpmyadmin
+    ports:
+      - 8585:85
+    environment:
+      MYSQL_USERNAME: whywebs
+      MYSQL_ROOT_PASSWORD: whywebs
+      MYSQL_USER: whywebs
+      MYSQL_PASSWORD: whywebs
+    external_links:
+        - mariadb:mariadb
+
+# nginx:
+  #   build: ./whywebs-drupal/nginx
+  #   image: whywebs/nginx:latest
+  #   container_name: n_whywebs
+  #   volumes:
+  #    - ./deploy:/etc/nginx
+  #    - ./config/drupal.conf:/etc/nginx/conf.d/drupal.conf
+  #    - ./config/nginx.conf:/etc/nginx/conf.d/nginx.conf
+  #   ports:
+  #    - "1010:1010"
+  #   environment:
+  #    - NGINX_HOST=nginx.local.dev
+  #    - NGINX_PORT=1010
+
   # #
   # # Drush
   # #
@@ -71,71 +134,3 @@ services:
   #     TERM: xterm
   #   stdin_open: true
   #   tty: true
-
-  web:
-    build: ./
-    image: whywebs/drupal7:latest
-    container_name: web_whywebs
-    hostname: whywebs
-    stdin_open: true
-    tty: true
-    volumes:
-      # Mount the local drupal directory in the container
-      - ./deploy:/var/www/html
-      - ./whywebscli.sh:/var/www/html/whywebscli.sh
-      - ./whywebs-drupal/php.ini:/usr/local/etc/php/conf.d/php.ini
-    ports:
-    # Expose port 8101 on the host.  Useful for debugging w/o Varnish
-    - "8080:80"
-    depends_on:
-      # Link the Solr container:
-      - "solr"
-      # Link the mariaDB container:
-      - "mariadb"
-      - "jenkins"
-    links:
-      # Link the Solr container:
-      - solr:solr
-      # Link the mariaDB container:
-      - mariadb:mysql
-      - jenkins:jenkins
-    environment:
-     - WHYWEBS_HOST=local.dev
-     - WHYWEBS_PORT=80
-    extra_hosts:
-     - "local.dev:127.0.0.1"
-
-    # command:
-    #   - /var/www/html/whywebscli.sh
-
-  # nginx:
-  #   build: ./whywebs-drupal/nginx
-  #   image: whywebs/nginx:latest
-  #   container_name: n_whywebs
-  #   volumes:
-  #    - ./deploy:/etc/nginx
-  #    - ./config/drupal.conf:/etc/nginx/conf.d/drupal.conf
-  #    - ./config/nginx.conf:/etc/nginx/conf.d/nginx.conf
-  #   ports:
-  #    - "1010:1010"
-  #   environment:
-  #    - NGINX_HOST=nginx.local.dev
-  #    - NGINX_PORT=1010
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    environment:
-     - PMA_ARBITRARY=1
-    volumes:
-     - /sessions
-    ports:
-      - 8181:80
-    environment:
-      MYSQL_USERNAME: whywebs
-      MYSQL_ROOT_PASSWORD: whywebs
-      MYSQL_USER: whywebs
-      MYSQL_PASSWORD: whywebs
-    external_links:
-        - mariadb:mariadb
-

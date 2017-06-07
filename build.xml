@@ -126,6 +126,23 @@
       </not>
       <then>
        <exec command="mkdir ${dir.base}/deploy/logs" logoutput="true" checkreturn="true"/>
+       <exec command="mkdir ${dir.base}/deploy/phpmyadmin" logoutput="true" checkreturn="true"/>
+    </then>
+  </if>
+  <if>
+      <not>
+        <available file="${dir.base}/public" type="dir" />
+      </not>
+      <then>
+        <exec command="rm -rf ${dir.base}/public" logoutput="true" checkreturn="false"/>
+    </then>
+  </if>
+  <if>
+      <not>
+        <available file="${dir.base}/sites" type="dir" />
+      </not>
+      <then>
+        <exec command="rm -rf ${dir.base}/sites" logoutput="true" checkreturn="false"/>
     </then>
   </if>
 </target>
@@ -260,9 +277,9 @@
         <!-- Prepare default sites directory for installation. -->
         <mkdir dir="${dir.sites}" mode="0755"/>
         <mkdir dir="${dir.sites}/default" mode="0755"/>
-        <copy file="${dir.temp}/sites/default/default.settings.php" tofile="${dir.sites}/default/default.settings.php" />
+        <copy file="${dir.base}/sites/default/default.settings.php" tofile="${dir.sites}/default/default.settings.php" />
         
-        <copy file="${dir.temp}/sites/default/default.settings.php" tofile="${dir.sites}/default/settings.php" />
+        <copy file="{dir.base}/whywebs-drupal/settings.php" tofile="${dir.sites}/default/settings.php" />
         <chmod file="${dir.sites}/default/settings.php" mode="0777" />
 <!--        <exec command="echo '${memory}' >> public/sites/default/settings.php" checkreturn="true"/>-->
 <!--        <exec command="echo '/* This version build by Mutasem Elayyoub Whywebs.com. */' >> ${dir.files}/${site}/settings.php" checkreturn="true"/>-->

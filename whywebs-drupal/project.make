@@ -1,7 +1,6 @@
 ; Basic Drupal core by Mutasem Elayyoub Whywebs.com
 core = 7.x
 api = 2
-version = "7.53"
 
 ; Core
 projects[drupal][type] = "core"

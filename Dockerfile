@@ -83,6 +83,7 @@ COPY ./deploy /var/www/html
 COPY ./config/mysql /etc/mysql
 COPY ./config/drush /home/root/.drush
 COPY ./config/nginx /etc/nginx
+COPY ./whywebs-drupal/settings.php /var/www/html/sites/default
 
 # Copy PHPmyADmin configuration
 COPY config/phpmyadmin /etc/
@@ -91,6 +92,7 @@ COPY config/phpmyadmin /etc/
 RUN ln -sf ./logs /var/log/nginx/access.log \
     && ln -sf ./logs /var/log/nginx/error.log \
     && chmod 600 /etc/mysql/my.cnf \
+    && a2enmod rewrite \
 	&& service apache2 restart 
 
 EXPOSE 80
