@@ -277,7 +277,7 @@
         <!-- Prepare default sites directory for installation. -->
         <mkdir dir="${dir.sites}" mode="0755"/>
         <mkdir dir="${dir.sites}/default" mode="0755"/>
-        <copy file="${dir.base}/sites/default/default.settings.php" tofile="${dir.sites}/default/default.settings.php" />
+        <copy file="${dir.tmp}/sites/default/default.settings.php" tofile="${dir.sites}/default/default.settings.php" />
         
         <copy file="{dir.base}/whywebs-drupal/settings.php" tofile="${dir.sites}/default/settings.php" />
         <chmod file="${dir.sites}/default/settings.php" mode="0777" />
