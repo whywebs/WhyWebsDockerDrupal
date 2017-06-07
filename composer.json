@@ -34,6 +34,7 @@
       "rm -rf ~/.composer/cache/*",
       "phing -debug",
       "docker exec web_whywebs /var/www/html/whywebscli.sh",
+      "find deploy -iname '*.txt' -not -path '*features*' -not -path '*test*' -not -path '*context*' -not -path '*zen*' -not -name 'robots.txt' -print -delete",
       "make",
       "echo 'Done!!'"
         ],
