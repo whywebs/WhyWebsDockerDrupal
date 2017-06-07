@@ -8,7 +8,7 @@ echo "HostkeyAlgorithms +ssh-dss" >> ~/.ssh/config
 
 chmod 600 ~/.ssh/config
 
-drush site-install --db-url=mysql://root:whywebs@192.168.99.100/whywebs -y --account-name=admin --account-pass=admin --clean-url=0
+drush site-install --db-url=mysql://root:whywebs@192.168.99.100/whywebs -y --account-name=admin --account-pass=admin --clean-url=1
 
 chmod -Rv 777 sites/default/files
 
