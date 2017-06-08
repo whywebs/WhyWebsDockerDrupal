@@ -28,10 +28,10 @@ projects[popup_message][subdir] = "contrib"
 ; WHywebs modules
 
 projects[multistep_registration][type] = "module"
-projects[multistep_registration][subdir] = "whywebs"
+projects[multistep_registration][subdir] = "contrib"
 
 projects[copyright_it][type] = "module"
-projects[copyright_it][subdir] = "whywebs"
+projects[copyright_it][subdir] = "contrib"
 
 ; Modules
 ; --------

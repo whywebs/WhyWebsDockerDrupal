@@ -2,8 +2,8 @@
 
 # please make sure to change the sudo password into your sudo password
 
-
 LOCALURL = '192.168.99.100    whywebs.site'
+LOCALURL1 = '192.168.99.100    admin.whywebs.site'
 # make sure to change the value below to your sudo password for local fixes
 SUDOPASS = 123
 
@@ -13,6 +13,7 @@ whywebscli:
 	echo $(SUDOPASS) | sudo -S chmod -Rv 777 deploy/sites/default/files
 	echo $(SUDOPASS) | sudo -S chmod -Rv 755 deploy/sites/default/settings.php
 	echo $(SUDOPASS) | sudo -S sh -c "echo "$(LOCALURL)" >> /etc/hosts"
+	echo $(SUDOPASS) | sudo -S sh -c "echo "$(LOCALURL1)" >> /etc/hosts"
 	echo $(SUDOPASS) | sudo -S apachectl restart
 
 #  built by  by Mutasem Elayyoub whywebs.com

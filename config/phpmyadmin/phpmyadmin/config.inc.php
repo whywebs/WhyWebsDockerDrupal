@@ -49,31 +49,33 @@ if (!empty($_ENV['PMA_HOST'])) {
 }
 
 /* Server settings */
-// for ($i = 1; isset($hosts[$i - 1]); $i++) {
-//     $cfg['Servers'][$i]['host'] = $hosts[$i - 1];
-//     if (isset($verbose[$i - 1])) {
-//         $cfg['Servers'][$i]['verbose'] = $verbose[$i - 1];
-//     }
-//     if (isset($ports[$i - 1])) {
-//         $cfg['Servers'][$i]['port'] = $ports[$i - 1];
-//     }
-//     if (isset($_ENV['PMA_USER'])) {
-//         $cfg['Servers'][$i]['auth_type'] = 'config';
-//         $cfg['Servers'][$i]['user'] = $_ENV['PMA_USER'];
-//         $cfg['Servers'][$i]['password'] = isset($_ENV['PMA_PASSWORD']) ? $_ENV['PMA_PASSWORD'] : '';
-//     } else {
-//         $cfg['Servers'][$i]['auth_type'] = 'cookie';
-//     }
-//     $cfg['Servers'][$i]['connect_type'] = 'tcp';
-//     $cfg['Servers'][$i]['compress'] = false;
-//     $cfg['Servers'][$i]['AllowNoPassword'] = true;
-// }
+for ($i = 1; isset($hosts[$i - 1]); $i++) {
+    $cfg['Servers'][$i]['host'] = $hosts[$i - 1];
+    if (isset($verbose[$i - 1])) {
+        $cfg['Servers'][$i]['verbose'] = $verbose[$i - 1];
+    }
+    if (isset($ports[$i - 1])) {
+        $cfg['Servers'][$i]['port'] = $ports[$i - 1];
+    }
+    if (isset($_ENV['PMA_USER'])) {
+        $cfg['Servers'][$i]['auth_type'] = 'config';
+        $cfg['Servers'][$i]['user'] = $_ENV['PMA_USER'];
+        $cfg['Servers'][$i]['password'] = isset($_ENV['PMA_PASSWORD']) ? $_ENV['PMA_PASSWORD'] : '';
+    } else {
+        $cfg['Servers'][$i]['auth_type'] = 'cookie';
+    }
+    $cfg['Servers'][$i]['connect_type'] = 'tcp';
+    $cfg['Servers'][$i]['compress'] = false;
+    $cfg['Servers'][$i]['AllowNoPassword'] = true;
+}
 /* Figure out hosts */
-$i++;
-$cfg['Servers'][$i]['host'] = '192.168.99.100:3306'; //provide hostname and port if other than default
-$cfg['Servers'][$i]['user'] = 'whywebs';   //user name for your remote server
-$cfg['Servers'][$i]['password'] = 'whywebs';  //password
-$cfg['Servers'][$i]['auth_type'] = 'config';       // keep it as config
+$cfg['Servers'][80]['host'] = '192.168.99.100:3306'; //provide hostname and port if other than default
+$cfg['Servers'][80]['user'] = 'whywebs';   //user name for your remote server
+$cfg['Servers'][80]['password'] = 'whywebs';  //password
+$cfg['Servers'][80]['auth_type'] = 'config';     // keep it as config
+$cfg['Servers'][80]['connect_type'] = 'tcp';
+$cfg['Servers'][80]['compress'] = false;
+$cfg['Servers'][80]['AllowNoPassword'] = true;
 
 
 /* Uploads setup */

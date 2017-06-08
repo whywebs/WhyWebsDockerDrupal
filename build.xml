@@ -279,6 +279,7 @@
         <mkdir dir="${dir.sites}/default" mode="0755"/>
         <copy file="${dir.base}/whywebs-drupal/settings.php" tofile="${dir.sites}/default/default.settings.php" />
         <copy file="${dir.base}/whywebs-drupal/settings.php" tofile="${dir.sites}/default/settings.php" />
+        <copy file="${dir.base}/whywebscli.sh" tofile="${dir.sites}/whywebscli.sh" />
        <chmod file="${dir.sites}/default/settings.php" mode="0777" />
       </then>
     </if>

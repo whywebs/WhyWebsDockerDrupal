@@ -10,3 +10,5 @@ vendor/*
 pre_installation_whywebs/*
 jenkins/*
 nginx/*
+cache/*
+*.DS_Store*
