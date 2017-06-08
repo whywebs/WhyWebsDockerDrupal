@@ -221,7 +221,7 @@
 
   <target name="drupal:cleanup-temp" description="Clean unnecessary files in the temporary Drupal directory">
     <!-- Remove all text files except robots.txt and other usefull txts. -->
-    <!-- <exec command="find ${dir.base} -iname '*.txt' -not -path '*features*' -not -path '*test*' -not -path '*context*' -not -path '*zen*' -not -name 'robots.txt' -print -delete" logoutput="true" checkreturn="false" /> -->
+    <!-- <exec command="find ${dir.temp} -iname '*.txt' -not -path '*features*' -not -path '*test*' -not -path '*context*' -not -path '*zen*' -not -name 'robots.txt' -print -delete" logoutput="true" checkreturn="false" /> -->
 
     <!-- Remove all patch files. -->
     <exec command="find ${dir.temp} -iname '*.patch' -print -delete" logoutput="true" checkreturn="false" />
@@ -277,12 +277,9 @@
         <!-- Prepare default sites directory for installation. -->
         <mkdir dir="${dir.sites}" mode="0755"/>
         <mkdir dir="${dir.sites}/default" mode="0755"/>
-        <copy file="${dir.tmp}/sites/default/default.settings.php" tofile="${dir.sites}/default/default.settings.php" />
-        
-        <copy file="{dir.base}/whywebs-drupal/settings.php" tofile="${dir.sites}/default/settings.php" />
-        <chmod file="${dir.sites}/default/settings.php" mode="0777" />
-<!--        <exec command="echo '${memory}' >> public/sites/default/settings.php" checkreturn="true"/>-->
-<!--        <exec command="echo '/* This version build by Mutasem Elayyoub Whywebs.com. */' >> ${dir.files}/${site}/settings.php" checkreturn="true"/>-->
+        <copy file="${dir.base}/whywebs-drupal/settings.php" tofile="${dir.sites}/default/default.settings.php" />
+        <copy file="${dir.base}/whywebs-drupal/settings.php" tofile="${dir.sites}/default/settings.php" />
+       <chmod file="${dir.sites}/default/settings.php" mode="0777" />
       </then>
     </if>
     
@@ -294,6 +291,7 @@
     <foreach param="site" absparam="sitepath" target="drupal:symlink:sites:site">
       <fileset refid="sites"/>
     </foreach>
+  
   <echo msg="${message}"/>
   </target>
   <target name="drupal:symlink:sites:site">

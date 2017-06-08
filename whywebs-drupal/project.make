@@ -25,6 +25,13 @@ projects[message_notify][subdir] = "contrib"
 projects[popup_message][type] = "module"
 projects[popup_message][subdir] = "contrib"
 
+; WHywebs modules
+
+projects[multistep_registration][type] = "module"
+projects[multistep_registration][subdir] = "whywebs"
+
+projects[copyright_it][type] = "module"
+projects[copyright_it][subdir] = "whywebs"
 
 ; Modules
 ; --------
@@ -571,9 +578,6 @@ projects[ckeditor_responsive_plugin][subdir] = "contrib"
 
 projects[wysiwyg_ckeditor_dragresize][type] = "module"
 projects[wysiwyg_ckeditor_dragresize][subdir] = "contrib"
-
-projects[copyright_it][type] = "module"
-projects[copyright_it][subdir] = "copyright_it"
 
 
 

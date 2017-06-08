@@ -40,6 +40,7 @@ RUN set -ex \
 	    imagemagick \
 	    xfonts-base \
 	    xfonts-75dpi \
+	    sshfs \
 	&& docker-php-ext-install \
 	    bcmath \
 	    bz2 \
@@ -78,12 +79,11 @@ RUN set -ex \
     
 
 COPY ./whywebs-drupal/php.ini /usr/local/etc/php/conf.d
-COPY ./whywebs-drupal/whywebs.dev.conf /etc/apache2/sites-enabled	
 COPY ./deploy /var/www/html
+COPY ./whywebscli.sh /var/www/html
 COPY ./config/mysql /etc/mysql
 COPY ./config/drush /home/root/.drush
 COPY ./config/nginx /etc/nginx
-COPY ./whywebs-drupal/settings.php /var/www/html/sites/default
 
 # Copy PHPmyADmin configuration
 COPY config/phpmyadmin /etc/

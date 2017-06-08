@@ -1,8 +1,10 @@
 #!/bin/sh
 
 # please make sure to change the sudo password into your sudo password
-BASEURL = $base_url="whywebs.dev";
-LOCALURL = 192.168.99.100 whywebs.dev
+
+
+LOCALURL = '192.168.99.100    whywebs.site'
+# make sure to change the value below to your sudo password for local fixes
 SUDOPASS = 123
 
 default: whywebscli
@@ -10,13 +12,13 @@ default: whywebscli
 whywebscli:
 	echo $(SUDOPASS) | sudo -S chmod -Rv 777 deploy/sites/default/files
 	echo $(SUDOPASS) | sudo -S chmod -Rv 755 deploy/sites/default/settings.php
-	echo $(SUDOPASS) | sudo -S echo $(BASEURL) >> deploy/sites/default/settings.php
 	echo $(SUDOPASS) | sudo -S sh -c "echo "$(LOCALURL)" >> /etc/hosts"
-	echo $(SUDOPASS) | sudo -S cp whywebs-drupal/whywebs.local.dev.conf /private/etc/apache2/other/
 	echo $(SUDOPASS) | sudo -S apachectl restart
 
+#  built by  by Mutasem Elayyoub whywebs.com
 	echo '##################################################################################'
 	echo ''
-	echo 'Your website on http://192.168.99.100/ is ready enjoy it !! by Mutasem Elayyoub'
+	echo 'Your website on http://whywebs.dev/ is ready enjoy it !!'
+	echo ' User name: admin  User password: admin '
 	echo ''
 	echo '##################################################################################'
